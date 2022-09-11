@@ -2,11 +2,11 @@
 use master
 go
 
---criaÁ„o do banco de dados principal
+--cria√ß√£o do banco de dados principal
 create database exercicio3
 go
 
---garantindo que estamos no banco necess·rio
+--garantindo que estamos no banco necess√°rio
 use exercicio3
 
 create table produto (
@@ -43,3 +43,10 @@ create table fatura (
 	primary key (numfatura),
 	foreign key (numnota) references notafiscal
 )
+
+select p.[nome] 
+from produto p
+where not exists (select 1
+                  from itemnotafiscal i
+                  where p.codproduto = i.codproduto)
+order by p.[nome];
