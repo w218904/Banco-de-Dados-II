@@ -44,9 +44,10 @@ create table fatura (
 	foreign key (numnota) references notafiscal
 )
 
-select p.[nome] 
+create view produto_nunca_vendido
+as
+select p.[codproduto], p.[nome], p.[qtdestoque]
 from produto p
 where not exists (select 1
-                  from itemnotafiscal i
-                  where p.codproduto = i.codproduto)
-order by p.[nome];
+	from itemnotafiscal i
+        where p.codproduto = i.codproduto)
