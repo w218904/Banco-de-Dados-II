@@ -89,7 +89,7 @@ begin transaction
 	begin
 		insert into atendente
 		values (222, '987654321', 01/01/2000)
-		if @@rowcount > 0 /* insercao de cliente bem sucedida */
+		if @@rowcount > 0 /* insercao de atendente bem sucedida */
 			commit transaction
 		else
 			rollback transaction
