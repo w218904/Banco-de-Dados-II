@@ -97,32 +97,26 @@ begin transaction
 	else
 		rollback transaction
 
-create procedure cadastroItemVenda
-	@codVenda int,
-	@codLivro int,
-	@quantidade int,
-	as
-		begin transaction
-			insert into itemvenda
-			values (@codVenda, @codLivro, @quantidade)
-			if @@rowcount > 0 /*insercao de itemvenda bem sucedido */
-				begin
-					update livro 
-					set qtd_estoque = qtd_estoque - @quantidade
-					where livro.codlivro = @codLivro;
-					if @@rowcount > 0 /* update do estoque de livro bem sucedida */
-						begin
-							commit transaction
-							return 1
-						end
-					else
-						begin
-							rollback transaction
-							return 0
-						end
-					end
+begin transaction
+
+	insert into venda
+	values (1,'2022-08-06 16:44:502', 111, 222)
+	if @@rowcount > 0 /*insercao de venda bem sucedido */
+	begin
+		insert into itemvenda
+		values (1, 2, 50), (1, 3, 30)
+		if @@rowcount > 0 /* insercao de atendente bem sucedida */
+			update livro 
+			set qtd_estoque = qtd_estoque - 50
+			where livro.codlivro = 2;
+
+			update livro 
+			set qtd_estoque = qtd_estoque - 30
+			where livro.codlivro = 3;
+			if @@rowcount > 0 /* update de estoque bem sucedido */
+				commit transaction
 			else
-				begin
-					rollback transaction
-					return 0
-				end
+				rollback transaction
+	end
+	else
+		rollback transaction
