@@ -96,3 +96,33 @@ begin transaction
 	end
 	else
 		rollback transaction
+
+create procedure cadastroItemVenda
+	@codVenda int,
+	@codLivro int,
+	@quantidade int,
+	as
+		begin transaction
+			insert into itemvenda
+			values (@codVenda, @codLivro, @quantidade)
+			if @@rowcount > 0 /*insercao de itemvenda bem sucedido */
+				begin
+					update livro 
+					set qtd_estoque = qtd_estoque - @quantidade
+					where livro.codlivro = @codLivro;
+					if @@rowcount > 0 /* update do estoque de livro bem sucedida */
+						begin
+							commit transaction
+							return 1
+						end
+					else
+						begin
+							rollback transaction
+							return 0
+						end
+					end
+			else
+				begin
+					rollback transaction
+					return 0
+				end
