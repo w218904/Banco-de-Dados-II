@@ -45,7 +45,7 @@ as
 begin transaction
 insert into livro
 values (@codigo, @titulo, @autor, @preco, @qtd_estoque)
-if @@rowcount > 0 /* insercao de livor bem sucedida */
+if @@rowcount > 0 /* insercao de livro bem sucedida */
 begin
 	commit transaction
 	return 1
