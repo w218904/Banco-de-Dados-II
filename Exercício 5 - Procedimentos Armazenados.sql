@@ -12,11 +12,11 @@ create procedure cadastrar_cliente
 as
 begin transaction
 insert into pessoa
-values (1, 'João', 'Rua do João', 1998387261)
+values (@codigo, @nome, @endereco, @telefone)
 begin
 if @@rowcount > 0 /* insercao de pessoa bem sucedida */
 	insert into cliente
-	values (1, 8746351728, '18/12/2000')
+	values (@codigo, @rg, @dtnasc)
 	if @@rowcount > 0 /* insercao de cliente bem sucedida */
 	begin
 		commit transaction
@@ -45,11 +45,11 @@ create procedure cadastrar_atendente
 as
 begin transaction
 insert into pessoa
-values (2, 'Pedro', 'Rua do Pedro', 19987152771)
+values (@codigo, @nome, @endereco, @telefone)
 begin
 if @@rowcount > 0 /* insercao de pessoa bem sucedida */
 	insert into cliente
-	values (2, 6748591872, '24/02/1995')
+	values (@codigo, @rg, @dtnasc)
 	if @@rowcount > 0 /* insercao de atendente bem sucedida */
 	begin
 		commit transaction
