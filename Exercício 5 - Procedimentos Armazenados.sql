@@ -50,7 +50,7 @@ begin transaction
 if @@rowcount > 0 /* insercao de pessoa bem sucedida */
 	insert into cliente
 	values (2, 6748591872, '24/02/1995')
-	if @@rowcount > 0 /* insercao de cliente bem sucedida */
+	if @@rowcount > 0 /* insercao de atendente bem sucedida */
 	begin
 		commit transaction
 		return 1
