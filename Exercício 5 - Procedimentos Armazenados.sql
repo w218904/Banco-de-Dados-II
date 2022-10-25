@@ -13,7 +13,7 @@ as
 begin transaction
 insert into pessoa
 values (1, 'João', 'Rua do João', 1998387261)
-begin transaction
+begin
 if @@rowcount > 0 /* insercao de pessoa bem sucedida */
 	insert into cliente
 	values (1, 8746351728, '18/12/2000')
@@ -46,7 +46,7 @@ as
 begin transaction
 insert into pessoa
 values (2, 'Pedro', 'Rua do Pedro', 19987152771)
-begin transaction
+begin
 if @@rowcount > 0 /* insercao de pessoa bem sucedida */
 	insert into cliente
 	values (2, 6748591872, '24/02/1995')
