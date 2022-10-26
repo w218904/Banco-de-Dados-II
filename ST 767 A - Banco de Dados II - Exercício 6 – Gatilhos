@@ -1,3 +1,4 @@
+--Apagando o banco de dados antigo e criando um novo
 use master
 go
 
@@ -10,6 +11,7 @@ go
 create database st767
 go
 
+--Criando as tabelas
 use st767
 go
 
@@ -39,9 +41,6 @@ foreign key (codproduto) references pproduto
 )
 go
 
-create index ixitemnota_codproduto on itemnotafiscal(codproduto)
-go
-
 create table fatura (
 numfatura int not null,
 dtvencimento datetime not null,
@@ -53,9 +52,30 @@ foreign key (numnota) references notafiscal
 )
 go
 
+--Criação dos índices para chaves estrangeiras
+create index ixitemnota_codproduto on itemnotafiscal(codproduto)
+go
+
 create index ixfatura_numnota on fatura(numnota)
 go
 
+--Inserindo dados para teste
+insert into pproduto values (1, 'lapis', 1.00, 100)
+insert into pproduto values (2, 'caneta', 1.50, 100)
+insert into pproduto values (3, 'borracha', 1.00, 100)
+insert into pproduto values (4, 'papel', 0.50, 100)
+
+insert into notafiscal values (1940028922, 0)
+
+go
+
+--Selects para teste
+select * from pproduto
+select * from notafiscal
+select * from itemnotafiscal
+go
+
+--Criação dos gatilhos
 create trigger inclusaoitemnotafiscal
 on itemnotafiscal for insert
 as
@@ -76,4 +96,3 @@ begin
 	if @@ROWCOUNT = 0
 	rollback transaction
 end
-
