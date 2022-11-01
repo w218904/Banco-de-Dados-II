@@ -151,7 +151,7 @@ go
 -- ******************************************************
 
 --Exercício D
-create trigger atualizaitemnotafiscal
+create trigger atualizarfatura
 on fatura for update
 as
 if update (dtpagamento)
@@ -159,25 +159,11 @@ begin
 
 	delete from produto
 	
-	update produto 
-	set qtdestoque = qtdestoque - (select (i.quantidade - d.quantidade)
-									from produto p inner join inserted i
-									on p.codproduto = i.codproduto
-									inner join deleted d
-									on i.codproduto = d.codproduto)
-		where codproduto = (select codproduto from deleted)
 	if @@ROWCOUNT = 0
 	rollback transaction
 	else
 	begin
-		update notafiscal
-		set valortotal = valortotal + (select p.preco * (i.quantidade - d.quantidade)
-										from produto p inner join inserted i
-										on p.codproduto = i.codproduto
-										inner join deleted d
-										on i.codproduto = d.codproduto and
-										i.numnota = d.numnota)
-			where numnota = (select codproduto from inserted)
+		
 		if @@ROWCOUNT = 0
 		rollback transaction
 	end
