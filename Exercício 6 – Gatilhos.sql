@@ -73,6 +73,8 @@ go
 --Criação dos gatilhos
 use st767
 go
+
+--Exercício A
 create trigger inclusaoitemnotafiscal
 on itemnotafiscal for insert
 as
@@ -92,7 +94,9 @@ begin
 	rollback transaction
 end
 go
+-- ******************************************************
 
+--Exercício B
 create trigger exclusaoitemnotafiscal
 on itemnotafiscal for delete
 as
@@ -112,7 +116,9 @@ begin
 	rollback transaction
 end
 go
+-- ******************************************************
 
+--Exercício C
 create trigger atualizaitemnotafiscal
 on itemnotafiscal for update
 as
@@ -142,6 +148,42 @@ begin
 	end
 end
 go
+-- ******************************************************
+
+--Exercício D
+create trigger atualizaitemnotafiscal
+on fatura for update
+as
+if update (dtpagamento)
+begin
+
+	delete from produto
+	
+	update produto 
+	set qtdestoque = qtdestoque - (select (i.quantidade - d.quantidade)
+									from produto p inner join inserted i
+									on p.codproduto = i.codproduto
+									inner join deleted d
+									on i.codproduto = d.codproduto)
+		where codproduto = (select codproduto from deleted)
+	if @@ROWCOUNT = 0
+	rollback transaction
+	else
+	begin
+		update notafiscal
+		set valortotal = valortotal + (select p.preco * (i.quantidade - d.quantidade)
+										from produto p inner join inserted i
+										on p.codproduto = i.codproduto
+										inner join deleted d
+										on i.codproduto = d.codproduto and
+										i.numnota = d.numnota)
+			where numnota = (select codproduto from inserted)
+		if @@ROWCOUNT = 0
+		rollback transaction
+	end
+end
+go
+-- ******************************************************
 
 --Inserções para teste
 insert into itemnotafiscal values (1, 2, 10)
