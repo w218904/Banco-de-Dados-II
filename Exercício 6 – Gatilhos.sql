@@ -151,22 +151,38 @@ go
 -- ******************************************************
 
 --Exercício D
+
+-- criação da tabela faturapaga
+create table faturapaga (
+numfatura int not null,
+dtvencimento datetime not null,
+dtpagamento datetime not null,
+valor numeric(5,2) not null,
+numnota numeric(10,0) not null,
+primary key (numfatura),
+foreign key (numnota) references notafiscal
+)
+go
+
+create index ixfatura_numnota on faturapaga(numnota)
+go
+
+-- trigger
 create trigger atualizarfatura
 on fatura for update
 as
 if update (dtpagamento)
 begin
 
-	delete from produto
-	
+	delete from fatura
+	where numfatura = numfatura	
 	if @@ROWCOUNT = 0
 	rollback transaction
 	else
-	begin
-		
-		if @@ROWCOUNT = 0
-		rollback transaction
-	end
+	insert into faturapaga(numfatura, dtvencimento, dtpagamento, valor, numnota)
+	select numfatura, dtvencimento, dtpagamento, valor, numnota from deleted
+	if @@ROWCOUNT = 0
+	rollback transaction
 end
 go
 -- ******************************************************
