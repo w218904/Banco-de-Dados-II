@@ -10,7 +10,7 @@ drop database st767
 create table Pessoa (
 	codigo int not null,
 	nome varchar(200) not null,
-	tipo int not null, -- 1 para Física, 2 para Editora
+	tipo bit not null, -- 0 para Física, 1 para Jurídica
 	primary key (codigo)
 );
 
@@ -154,7 +154,7 @@ create table Venda (
 	data smalldatetime not null,
 	valorTotal decimal(11,2) not null,
 	qtd_parcelamento int not null,
-	tipo int not null, -- 1- Presencial, 2- Online
+	tipo bit not null, -- 0- Presencial, 1- Online
 	primary key (codigo)
 );
 
